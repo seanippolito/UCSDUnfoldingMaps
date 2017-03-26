@@ -1,6 +1,10 @@
 package module1;
 
 import processing.core.PApplet;
+import processing.core.PImage;
+import java.util.Calendar;
+import java.util.Locale;
+
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.providers.AbstractMapProvider;
@@ -28,24 +32,30 @@ public class HelloWorld extends PApplet
 	
 	// IF YOU ARE WORKING OFFLINE: Change the value of this variable to true
 	private static final boolean offline = false;
+	private PImage backgroundImg;
+	private String URL = "http://www.rantlifestyle.com/wp-content/uploads/2014/08/703.-More-Than-One-Dream.jpg";
 	
 	/** The map we use to display our home town: La Jolla, CA */
 	UnfoldingMap map1;
 	
-	/** The map you will use to display your home town */ 
+	/** The map you will use to display any town */ 
 	UnfoldingMap map2;
 	UnfoldingMap map3;
 
 	public void setup() {
-		size(1250, 600, P2D);  // Set up the Applet window to be 800x600
+		size(1250, 625, P2D);  // Set up the Applet window to be 800x600
 		                      // The OPENGL argument indicates to use the 
 		                      // Processing library's 2D drawing
 		                      // You'll learn more about processing in Module 3
+		background(255);
+		stroke(0);
 
 		// This sets the background color for the Applet.  
 		// Play around with these numbers and see what happens!
-		this.background(200, 200, 200);
-		
+		//this.background(200, 200, 200);
+		backgroundImg = loadImage(URL, "jpg");
+		backgroundImg.resize(0, height);
+		image(backgroundImg, 0, 0);
 		// Select a map provider
 		AbstractMapProvider provider = new Google.GoogleTerrainProvider();
 		// Set a zoom level
@@ -80,9 +90,6 @@ public class HelloWorld extends PApplet
 		MapUtils.createDefaultEventDispatcher(this, map1);
 		MapUtils.createDefaultEventDispatcher(this, map2);
 		MapUtils.createDefaultEventDispatcher(this, map3);
-		
-		// TODO: Add code here that creates map2 
-		// Then you'll modify draw() below
 
 	}
 
@@ -90,9 +97,24 @@ public class HelloWorld extends PApplet
 	public void draw() {
 		// So far we only draw map1...
 		// TODO: Add code so that both maps are displayed
-		map1.draw();
-		map2.draw();
-		map3.draw();
+		int[] color = sunColorSec(second());
+		fill(color[0], color[1], color[2]);
+		ellipse(width/8, height/4, width/8, height/4);
+		
+//		map1.draw();
+//		map2.draw();
+//		map3.draw();
+	}
+	
+	public int[] sunColorSec(float seconds) {
+		int[] rgb = new int[3];
+		float diffFrom30 = Math.abs(30-seconds);
+		float ratio = diffFrom30/30;
+		rgb[0] = (int)(ratio*255);
+		rgb[1] = (int)(ratio*255);
+		rgb[2] = 0;
+		
+		return rgb;
 	}
 
 	
